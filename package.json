@@ -1,0 +1,23 @@
+{
+  "name": "cast-web-api-desktop",
+  "version": "1.2.0",
+  "description": "Desktop app for cast-web-api",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vervallsweg/cast-web-api-desktop.git"
+  },
+  "author": "vervallsweg",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/vervallsweg/cast-web-api-desktop/issues"
+  },
+  "homepage": "https://github.com/vervallsweg/cast-web-api-desktop#readme",
+  "dependencies": {
+    "cast-web-api": "1.2.0-rc3",
+    "electron": "^4.1.4"
+  }
+}

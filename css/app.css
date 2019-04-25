@@ -1,0 +1,44 @@
+#controls > div > div > .button {
+    margin: 1em 0 2.5em 0;
+}
+
+#controls > div > div {
+    padding: 1rem 2rem;
+}
+
+.settings {
+    padding: 3em 0;
+}
+
+#save-button {
+    margin: 2em 0 0 0;
+}
+
+.ui.divider {
+    flex-grow: 0.7 !important;
+}
+
+.status {
+    background-color: #e4e4e4;
+    border-radius: 50%;
+    width: 7em;
+    height: 7em;
+    margin: 1.5em 0 0 1.25em;
+}
+
+.status.offline{
+    background-color: #fbe2e2;
+}
+
+.status.online{
+    background-color: #d6ffd6;
+}
+
+.status-img {
+    width: 4em;
+    height: 4em;
+    position: absolute;
+    top: 3.9em;
+    left: 3.8em;
+    opacity: 0.9;
+}
