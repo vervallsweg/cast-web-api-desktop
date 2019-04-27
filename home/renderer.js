@@ -6,6 +6,7 @@ const { ipcRenderer, shell } = require('electron');
 const ui = require('./ui');
 
 let latestStatus = [];
+let init = {};
 
 const home = {
     loading: document.getElementById('loading'),
@@ -26,7 +27,8 @@ const controls = {
     stop: document.getElementById('stop'),
     autostart: document.getElementById('autostart'),
     unautostart: document.getElementById('unautostart'),
-    fixPerm: document.getElementById('fix-perm'),
+    configDir: document.getElementById('config-dir'),
+    logsDir: document.getElementById('logs-dir'),
     openLogs: document.getElementById('open-logs'),
     swagger: document.getElementById('swagger')
 };
@@ -40,6 +42,11 @@ const bottomMenu = {
 const modal = {
     content: document.getElementById('modal-content')
 };
+
+ipcRenderer.on('init', (event, newInit) => {
+    init = newInit;
+    ipcRenderer.send('bottom-menu-refresh');
+});
 
 ipcRenderer.on('did-finish-load', () => {
     ui.setLoading(false, home);
@@ -77,13 +84,21 @@ controls.unautostart.addEventListener('click', () => {
     ipcRenderer.send('control-unstartup');
 });
 
-controls.fixPerm.addEventListener('click', () => {
-    ipcRenderer.send('control-fix-perm');
+controls.configDir.addEventListener('click', () => {
+    if (init.configDir) {
+        shell.openItem(init.configDir);
+    }
+});
+
+controls.logsDir.addEventListener('click', () => {
+    if (init.logsDir) {
+        shell.openItem(init.logsDir);
+    }
 });
 
 controls.openLogs.addEventListener('click', () => {
-    if (latestStatus[0] && latestStatus[0].pm2_env && latestStatus[0].pm2_env.pm_out_log_path) {
-        shell.openItem(latestStatus[0].pm2_env.pm_out_log_path);
+    if (latestStatus && latestStatus.logPath) {
+        shell.openItem(latestStatus.logPath);
     }
 });
 
@@ -94,5 +109,3 @@ bottomMenu.refresh.addEventListener('click', () => {
 bottomMenu.settings.addEventListener('click', () => {
     ipcRenderer.send('bottom-menu-settings');
 });
-
-ipcRenderer.send('bottom-menu-refresh');

@@ -59,5 +59,3 @@ settingsForm.saveButton.addEventListener('click', () => {
         }
     });
 });
-
-ipcRenderer.send('get-config');
