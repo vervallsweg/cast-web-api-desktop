@@ -5,12 +5,10 @@ function setLoading(isLoading, home) {
 function parseStatus(status, hero, controls) {
     if (!status) return;
 
-    status.forEach(({pm2_env={status: '-'}, address='-'}) => {
-        hero.status.innerHTML = pm2_env.status;
-        hero.address.innerHTML = address;
-        (pm2_env.pm_out_log_path) ? controls.openLogs.classList.value = 'item fluid ui button' : controls.openLogs.classList.value = 'item fluid ui button disabled';
-        setStatusImg(pm2_env.status, hero);
-    });
+    hero.status.innerHTML = status.status || '-';
+    hero.address.innerHTML = status.address || '-';
+    (status.logPath) ? controls.openLogs.classList.value = 'item fluid ui button' : controls.openLogs.classList.value = 'item fluid ui button disabled';
+    setStatusImg(status.status, hero);
 }
 
 function showPopup(message, modal) {
