@@ -12,6 +12,8 @@ matrix:
     - os: linux
       services: docker
       language: generic
+      env:
+        - ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true
 
 cache:
   directories:

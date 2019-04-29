@@ -1,13 +1,15 @@
 {
   "name": "cast-web-api-desktop",
-  "version": "1.2.0",
+  "version": "1.1.0",
   "description": "Desktop app for cast-web-api",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "dist:all": "electron-builder -mwl",
+    "postinstall": "electron-builder install-app-deps",
+    "release": "build"
   },
   "repository": {
     "type": "git",
@@ -30,6 +32,17 @@
     "appId": "io.github.vervallsweg.cast-web-api-desktop",
     "mac": {
       "category": "public.app-category.utilities"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "asar": false
   }
