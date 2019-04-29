@@ -1,11 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
-const { fork } = require('child_process');
 const config = require('cast-web-api/lib/config/config');
-const fs = require('fs');
 const path = require('path');
-const ga = require('google-assistant');
-
-console.log(ga);
 
 let windows = new Map();
 let proc;
@@ -24,8 +19,6 @@ function createMainWindow () {
     });
 
     mainWindow.setMenu(null);
-
-    mainWindow.webContents.openDevTools();
 
     // and load the index.html of the app.
     mainWindow.loadFile('home/index.html');
@@ -80,6 +73,33 @@ function createSettingsWindow() {
     });
 
     windows.set('settings', settingsWindow);
+}
+
+function createApiWindow() {
+    let apiWindow = new BrowserWindow({
+        show: false,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    });
+
+    apiWindow.loadFile('background/index.html');
+
+    apiWindow.webContents.openDevTools();
+
+    apiWindow.on('closed', () => {
+        console.log('closed window');
+        windows.delete('api');
+    });
+
+    apiWindow.webContents.on('did-finish-load', () => {
+        getInit()
+            .then( success => {
+                apiWindow.webContents.send('did-finish-load', success);
+            });
+    });
+
+    windows.set('api', apiWindow);
 }
 
 app.on('ready', createMainWindow);
@@ -217,23 +237,21 @@ function getConfig() {
     });
 }
 
+//API-background
+ipcMain.on('api-address', (event, address) => {
+    sendMainWindowStatus({status: 'online', address: address.address, logPath: address.logPath});
+});
+
 function start() {
     return new Promise(resolve => {
-        if (!proc) {
-            let logPath = path.join(app.getPath('logs'), Date.now()+".log" ).normalize();
-            let logStream = fs.createWriteStream(logPath);
+        if (!windows.has('api')) {
+            createApiWindow();
 
-            proc = fork(require.resolve('cast-web-api/api'), {detached: false, stdio: 'pipe', env: {ELECTRON_RUN_AS_NODE: 0}});
-            proc.logPath = logPath;
-
-            proc.stdout.pipe(logStream);
-            proc.stderr.pipe(logStream);
-
-            proc.stdout.once('data', () => {
-                resolve({status: 'online', address: proc.address, logPath: proc.logPath});
+            ipcMain.once('api-logPath', (event, logPath) => {
+                resolve({status: 'online', logPath: logPath.logPath});
             });
 
-            listeners();
+            //setTimeout; TODO:
         } else {
             resolve({status: 'online', address: proc.address, logPath: proc.logPath});
         }
@@ -242,14 +260,14 @@ function start() {
 
 function stop() {
     return new Promise(resolve => {
-        if (proc) {
-            proc.kill();
+        if (windows.has('api')) {
+            let apiWindow = windows.get('api');
 
-            proc.once('close', (code) => {
-                console.log(`child process exited with code ${code}`);
+            apiWindow.once('closed', () => {
                 resolve({status: 'offline'});
-                proc = null;
             });
+
+            apiWindow.close();
         } else {
             resolve({status: 'offline'});
         }
