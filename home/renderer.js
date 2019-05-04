@@ -33,14 +33,21 @@ const controls = {
     swagger: document.getElementById('swagger')
 };
 
-const bottomMenu = {
-    all: document.getElementById('bottom-menu'),
+const bottomMenuLeft = {
+    all: document.getElementById('bottom-menu-left'),
+    donate: document.getElementById('donate'),
+    help: document.getElementById('help')
+};
+
+const bottomMenuRight = {
+    all: document.getElementById('bottom-menu-right'),
     refresh: document.getElementById('refresh'),
     settings: document.getElementById('settings')
 };
 
 const modal = {
-    content: document.getElementById('modal-content')
+    content: document.getElementById('modal-content'),
+    openLogs: document.getElementById('error-openLogs')
 };
 
 ipcRenderer.on('init', (event, newInit) => {
@@ -63,9 +70,14 @@ ipcRenderer.on('status-received', (event, status) => {
 
 ipcRenderer.on('error-received', (event, error) => {
     console.error(error);
-    let message = `${error.stdout}</br>${error.stderr}`;
-    if (error.error && error.error.message) message = `${error.error.message}</br></br>${message}`;
-    ui.showPopup(message, modal);
+    if (latestStatus && latestStatus.logPath) {
+        let path = latestStatus.logPath;
+        modal.openLogs.addEventListener('click', () => {
+            shell.openItem(path);
+        });
+    }
+
+    ui.showPopup(error.message, modal);
 });
 
 controls.start.addEventListener('click', () => {
@@ -102,10 +114,18 @@ controls.openLogs.addEventListener('click', () => {
     }
 });
 
-bottomMenu.refresh.addEventListener('click', () => {
+bottomMenuRight.refresh.addEventListener('click', () => {
     ipcRenderer.send('bottom-menu-refresh');
 });
 
-bottomMenu.settings.addEventListener('click', () => {
+bottomMenuRight.settings.addEventListener('click', () => {
     ipcRenderer.send('bottom-menu-settings');
+});
+
+bottomMenuLeft.donate.addEventListener('click', () => {
+    shell.openExternal('https://www.paypal.me/vervallsweg');
+});
+
+bottomMenuLeft.help.addEventListener('click', () => {
+    shell.openExternal('https://vervallsweg.github.io/cast-web/help/');
 });

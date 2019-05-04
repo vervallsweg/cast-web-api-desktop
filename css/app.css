@@ -42,3 +42,15 @@
     left: 3.8em;
     opacity: 0.9;
 }
+
+#bottom-menu-right {
+    position: fixed;
+    bottom: 2em;
+    right: 2em;
+}
+
+#bottom-menu-left {
+    position: fixed;
+    bottom: 2em;
+    left: 2em;
+}

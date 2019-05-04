@@ -1,9 +1,21 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, Tray, Menu} = require('electron');
 const config = require('cast-web-api/lib/config/config');
 const path = require('path');
 
 let windows = new Map();
-let proc;
+let tray;
+
+function createTray() {
+    tray = new Tray('./img/icon/icon-small.png');
+
+    const contextMenu = Menu.buildFromTemplate([
+        { label: 'Open', type: 'normal', click: activate },
+        { label: 'Quit', type: 'normal', role: 'quit' }
+    ]);
+
+    tray.setToolTip('cast-web-api-desktop');
+    tray.setContextMenu(contextMenu);
+}
 
 function createMainWindow () {
     // Create the main browser window.
@@ -23,13 +35,9 @@ function createMainWindow () {
     // and load the index.html of the app.
     mainWindow.loadFile('home/index.html');
 
-    // Emitted when the main window is closed.
     mainWindow.on('closed', () => {
-        if (process.platform !== 'darwin') {
-            app.quit();
-        } else {
-            windows.delete('main');
-        }
+        windows.delete('main');
+        checkClose();
     });
 
     mainWindow.webContents.on('did-finish-load', () => {
@@ -60,6 +68,7 @@ function createSettingsWindow() {
 
     settingsWindow.on('closed', () => {
         windows.delete('settings');
+        checkClose();
     });
 
     settingsWindow.webContents.on('did-finish-load', () => {
@@ -88,7 +97,6 @@ function createApiWindow() {
     apiWindow.webContents.openDevTools();
 
     apiWindow.on('closed', () => {
-        console.log('closed window');
         windows.delete('api');
     });
 
@@ -102,20 +110,43 @@ function createApiWindow() {
     windows.set('api', apiWindow);
 }
 
-app.on('ready', createMainWindow);
+app.on('ready', () => {
+    createMainWindow();
+    createTray();
+});
 
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
+app.on('window-all-closed', checkClose);
+
+function checkClose() {
+    if (process.platform === 'darwin') {
+        if (!windows.has('main') && !windows.has('settings')) {
+            app.dock.hide();
+        }
+    }
+    if (process.platform === 'win32') {
+        if (!windows.has('settings')) {
+            //TODO: close windows window
+        }
+    }
+    //TODO: check linux behaviour
+}
+
+// And show icon again if window reopened.
+app.on('browser-window-created', () => {
+    if (process.platform === 'darwin') {
+        app.dock.show();
+    } else {
+        //TODO: check linux behaviour
     }
 });
 
-app.on('activate', () => {
+app.on('activate', activate);
+
+function activate() {
     if (windows === null || (windows != null && windows.size < 1)) {
         createMainWindow();
     }
-});
+}
 
 app.on('before-quit', () => {
     stop();
@@ -239,7 +270,14 @@ function getConfig() {
 
 //API-background
 ipcMain.on('api-address', (event, address) => {
-    sendMainWindowStatus({status: 'online', address: address.address, logPath: address.logPath});
+    let apiWindow = windows.get('api') || {logPath: null};
+    apiWindow.address = address.address;
+    sendMainWindowStatus({status: 'online', address: address.address, logPath: apiWindow.logPath});
+});
+
+ipcMain.on('api-error', (event, error) => {
+    sendMainWindowError(error);
+    stop().then((stop)=>{event.sender.send('status-received', stop)});
 });
 
 function start() {
@@ -248,10 +286,17 @@ function start() {
             createApiWindow();
 
             ipcMain.once('api-logPath', (event, logPath) => {
-                resolve({status: 'online', logPath: logPath.logPath});
+                windows.get('api').logPath = logPath.logPath;
+                resolve({status: 'online', logPath: logPath.logPath, address: windows.get('api').address});
             });
 
-            //setTimeout; TODO:
+            setTimeout(() => {
+                let apiWindow = windows.get('api') || {};
+                if (!apiWindow.logPath || !apiWindow.address) {
+                    sendMainWindowError({message: "API doesn't respond. Check the log file to see the error message."});
+                    stop().then(() => {sendMainWindowStatus({status: 'offline'})});
+                }
+            }, 5000);
         } else {
             resolve({status: 'online', address: proc.address, logPath: proc.logPath});
         }
@@ -276,26 +321,9 @@ function stop() {
 
 function status() {
     return new Promise(resolve => {
-        if (proc) resolve({status: 'online', address: proc.address, logPath: proc.logPath});
+        let apiWindow = windows.get('api') || {logPath: null, address: null};
+        if (windows.has('api')) resolve({status: 'online', address: apiWindow.address, logPath: apiWindow.logPath});
         else resolve({status: 'offline'});
-    });
-}
-
-function listeners() {
-    proc.on('close', (code) => {
-        sendMainWindowStatus({status: 'offline'});
-        proc = null;
-    });
-
-    proc.on('error', (error) => {
-        // console.log(`child process error ${error}`); //TODO: maybe display err output if fork fails couple of seconds after start
-    });
-
-    proc.stdout.on('data', (data) => {
-        if (data.includes('running at http://')) { //TODO: stop listening after we got ip
-            proc.address = 'http://'+(data.toString().split('http://'))[1].trim();
-            sendMainWindowStatus({status: 'online', address: proc.address, logPath: proc.logPath});
-        }
     });
 }
 
@@ -303,6 +331,13 @@ function sendMainWindowStatus(status) {
     if (windows.has('main')) {
         let mainWindow = windows.get('main');
         mainWindow.webContents.send('status-received', status);
+    }
+}
+
+function sendMainWindowError(err) {
+    if (windows.has('main')) {
+        let mainWindow = windows.get('main');
+        mainWindow.webContents.send('error-received', err);
     }
 }
 

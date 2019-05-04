@@ -16,8 +16,7 @@ ipcRenderer.on('did-finish-load', (event, init) => {
             logPath: logger.logPath
         });
     } catch (e) {
-        console.log(e);
-        //Todo: try/catch might be able to detect crash
+        ipcRenderer.send('api-error', e);
     }
     console.log('did-finish');
 });

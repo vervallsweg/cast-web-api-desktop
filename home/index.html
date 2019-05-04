@@ -32,8 +32,8 @@
                 </div>
                 <div class="ten wide column">
                     <h2>cast-web-api <span id="version">v1.2.0</span></h2>
-                    <h3 id="status">status</h3>
-                    <h3 id="address">address</h3>
+                    <h3 id="status">offline</h3>
+                    <h3 id="address">-</h3>
                 </div>
             </div>
         </div>
@@ -70,7 +70,11 @@
         </div>
     </div>
 </div>
-<div id="bottom-menu" style="position: fixed; bottom: 2em; right: 2em;">
+<div id="bottom-menu-left">
+    <div id="help" class="circular ui icon button"><i class="question icon"></i></div>
+    <div id="donate" class="circular ui icon button"><i class="icon paypal"></i></div>
+</div>
+<div id="bottom-menu-right" style="position: fixed; bottom: 2em; right: 2em;">
     <div id="refresh" class="circular ui icon button"><i class="redo alternate icon"></i></div>
     <div id="settings" class="circular ui icon button"><i class="icon cog"></i></div>
 </div>
@@ -85,8 +89,9 @@
         <p id="modal-content"></p>
     </div>
     <div class="actions">
-        <div class="ui icon basic cancel inverted button">
-            <i class="help icon"></i>
+        <div class="ui inverted basic button" id="error-openLogs">
+            <i class="file alternate icon"></i>
+            Logs
         </div>
         <div class="ui red ok inverted button">
             <i class="remove icon"></i>
