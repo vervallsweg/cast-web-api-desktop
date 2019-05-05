@@ -7,6 +7,9 @@ let tray;
 
 function createTray() {
     let icPath = path.join(__dirname, 'img/icon/icon-small.png').normalize();
+    if (process.platform === 'darwin') {
+        icPath = path.join(__dirname, 'img/icon/icon-smallTemplate.png').normalize();
+    }
     tray = new Tray(icPath);
 
     const contextMenu = Menu.buildFromTemplate([
