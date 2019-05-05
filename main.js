@@ -6,7 +6,8 @@ let windows = new Map();
 let tray;
 
 function createTray() {
-    tray = new Tray('./img/icon/icon-small.png');
+    let icPath = path.join(__dirname, 'img/icon/icon-small.png').normalize();
+    tray = new Tray(icPath);
 
     const contextMenu = Menu.buildFromTemplate([
         { label: 'Open', type: 'normal', click: activate },
@@ -124,8 +125,10 @@ function checkClose() {
         }
     }
     if (process.platform === 'win32') {
-        if (!windows.has('settings')) {
-            //TODO: close windows window
+        let settingsWindow = windows.get('settings'); //this prevents nullpointer coz, this is triggered twice when closing the main window
+        if (!windows.has('main') && settingsWindow) {
+            windows.delete('settings'); //and we need to delete the reference immediately, otherwise on the second call it wouldn't be deleted yet
+            settingsWindow.close(); //otherwise this would close the tray? Seems like garbage collection, but why? the tray variable should still be set
         }
     }
     //TODO: check linux behaviour
@@ -143,7 +146,7 @@ app.on('browser-window-created', () => {
 app.on('activate', activate);
 
 function activate() {
-    if (windows === null || (windows != null && windows.size < 1)) {
+    if (windows === null || (windows != null && !windows.has('main'))) {
         createMainWindow();
     }
 }
