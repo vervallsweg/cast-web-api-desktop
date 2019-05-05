@@ -52,7 +52,9 @@ const modal = {
 
 ipcRenderer.on('init', (event, newInit) => {
     init = newInit;
-    ipcRenderer.send('bottom-menu-refresh');
+
+    if (init.autostart) ipcRenderer.send('control-start');
+    else ipcRenderer.send('bottom-menu-refresh');
 });
 
 ipcRenderer.on('did-finish-load', () => {
@@ -80,6 +82,10 @@ ipcRenderer.on('error-received', (event, error) => {
     ui.showPopup(error.message, modal);
 });
 
+ipcRenderer.on('autostart-received', (event, autostart) => {
+    ui.setAutoStart(autostart, controls);
+});
+
 controls.start.addEventListener('click', () => {
     ipcRenderer.send('control-start');
 });
@@ -89,11 +95,7 @@ controls.stop.addEventListener('click', () => {
 });
 
 controls.autostart.addEventListener('click', () => {
-    ipcRenderer.send('control-startup');
-});
-
-controls.unautostart.addEventListener('click', () => {
-    ipcRenderer.send('control-unstartup');
+    ipcRenderer.send('control-set-autostart', !ui.getAutoStart(controls) );
 });
 
 controls.configDir.addEventListener('click', () => {

@@ -10,6 +10,7 @@ function createTray() {
     if (process.platform === 'darwin') {
         icPath = path.join(__dirname, 'img/icon/icon-smallTemplate.png').normalize();
     }
+
     tray = new Tray(icPath);
 
     const contextMenu = Menu.buildFromTemplate([
@@ -198,16 +199,16 @@ ipcMain.on('control-stop', (event) => {
         });
 });
 
-ipcMain.on('control-startup', (event) => {
+ipcMain.on('control-set-autostart', (event, autoStart) => {
+    app.setLoginItemSettings({
+        openAtLogin: autoStart
+    });
 
+    event.sender.send('autostart-received', autoStart);
 });
 
-ipcMain.on('control-unstartup', (event) => {
-
-});
-
-ipcMain.on('control-fix-perm', (event) => {
-
+ipcMain.on('control-get-autostart', (event) => {
+    event.sender.send('autostart-received', autoStart);
 });
 
 ipcMain.on('bottom-menu-refresh', (event) => {
@@ -221,6 +222,8 @@ ipcMain.on('bottom-menu-refresh', (event) => {
         .finally(()=>{
             event.sender.send('did-finish-load');
         });
+
+    event.sender.send('autostart-received', app.getLoginItemSettings().openAtLogin);
 });
 
 //settings
@@ -349,6 +352,6 @@ function sendMainWindowError(err) {
 
 function getInit() {
     return new Promise(resolve => {
-        resolve({configDir: path.join(path.dirname(require.resolve('cast-web-api')), 'config').normalize(), logsDir: app.getPath('logs')});
+        resolve({configDir: path.join(path.dirname(require.resolve('cast-web-api')), 'config').normalize(), logsDir: app.getPath('logs'), autostart: app.getLoginItemSettings().openAtLogin});
     });
 }

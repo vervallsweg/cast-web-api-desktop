@@ -23,4 +23,20 @@ function setStatusImg(status, hero) {
     hero.statusImg.classList.value = css;
 }
 
-module.exports = {setLoading, parseStatus, showPopup};
+function setAutoStart(autoStart, controls) {
+    let buttonCss = 'ui fluid floating right labeled icon button';
+    let iconCss = 'close icon';
+    if (autoStart) {
+        buttonCss = 'ui fluid floating right labeled icon green button';
+        iconCss = 'check icon';
+    }
+
+    controls.autostart.classList.value = buttonCss;
+    controls.autostart.getElementsByTagName('i')[0].classList.value = iconCss;
+}
+
+function getAutoStart(controls) {
+    return (controls.autostart.classList.contains('green'));
+}
+
+module.exports = {setLoading, parseStatus, showPopup, setAutoStart, getAutoStart};
