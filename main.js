@@ -183,6 +183,8 @@ ipcMain.on('control-start', (event) => {
         .finally(() => {
             event.sender.send('did-finish-load');
         });
+
+    event.sender.send('autostart-received', app.getLoginItemSettings().openAtLogin);
 });
 
 ipcMain.on('control-stop', (event) => {
