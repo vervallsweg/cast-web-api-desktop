@@ -46,7 +46,7 @@ function checkForAddress(data) {
             address: address,
             logPath: logger.logPath
         });
-        logger.readStream.removeListener('data', checkForAddress); //TODO: stop listening after we got ip
+        logger.readStream.removeListener('data', checkForAddress);
         logger.readStream.destroy();
         delete logger.readStream;
     }

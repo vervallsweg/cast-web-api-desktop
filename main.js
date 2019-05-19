@@ -301,13 +301,15 @@ function start() {
                 resolve({status: 'online', logPath: logPath.logPath, address: windows.get('api').address});
             });
 
-            setTimeout(() => {
+            let timeout = setTimeout(() => {
                 let apiWindow = windows.get('api') || {};
                 if (!apiWindow.logPath || !apiWindow.address) {
                     sendMainWindowError({message: "API doesn't respond. Check the log file to see the error message."});
                     stop().then(() => {sendMainWindowStatus({status: 'offline'})});
                 }
             }, 5000);
+
+            windows.get('api').timeout = timeout;
         } else {
             resolve({status: 'online', address: proc.address, logPath: proc.logPath});
         }
@@ -318,6 +320,8 @@ function stop() {
     return new Promise(resolve => {
         if (windows.has('api')) {
             let apiWindow = windows.get('api');
+
+            if (apiWindow.timeout) clearTimeout(apiWindow.timeout);
 
             apiWindow.once('closed', () => {
                 resolve({status: 'offline'});
