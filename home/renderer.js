@@ -2,7 +2,7 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-const { ipcRenderer, shell } = require('electron');
+const { clipboard, ipcRenderer, shell } = require('electron');
 const ui = require('./ui');
 
 let latestStatus = [];
@@ -18,7 +18,11 @@ const hero = {
     version: document.getElementById('version'),
     status: document.getElementById('status'),
     address: document.getElementById('address'),
-    statusImg: document.getElementById('status-img')
+    statusImg: document.getElementById('status-img'),
+    addressPopup: {
+        copy: document.getElementById('address-copy'),
+        open: document.getElementById('address-open')
+    }
 };
 
 const controls = {
@@ -130,4 +134,12 @@ bottomMenuLeft.donate.addEventListener('click', () => {
 
 bottomMenuLeft.help.addEventListener('click', () => {
     shell.openExternal('https://vervallsweg.github.io/cast-web/help/');
+});
+
+hero.addressPopup.copy.addEventListener('click', () => {
+    clipboard.writeText(latestStatus.address);
+});
+
+hero.addressPopup.open.addEventListener('click', () => {
+    shell.openExternal(latestStatus.address);
 });

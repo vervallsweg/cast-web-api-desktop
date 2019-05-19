@@ -9,6 +9,7 @@ function parseStatus(status, hero, controls) {
     hero.address.innerHTML = status.address || '-';
     (status.logPath) ? controls.openLogs.classList.value = 'item fluid ui button' : controls.openLogs.classList.value = 'item fluid ui button disabled';
     setStatusImg(status.status, hero);
+    setAddressPopup(status.address || '-', hero.addressPopup);
 }
 
 function showPopup(message, modal) {
@@ -21,6 +22,23 @@ function setStatusImg(status, hero) {
     let css = 'status offline';
     if (status === 'online') css = 'status online';
     hero.statusImg.classList.value = css;
+}
+
+function setAddressPopup(address) {
+    if (address === '-') {
+        $('#address')
+            .popup(
+                'destroy'
+            )
+        ;
+    } else {
+        $('#address')
+            .popup({
+                inline: true,
+                hoverable: true
+            })
+        ;
+    }
 }
 
 function setAutoStart(autoStart, controls) {
