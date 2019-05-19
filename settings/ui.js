@@ -23,4 +23,15 @@ function showPopup(message, modal) {
     $('.ui.basic.modal').modal('show');
 }
 
-module.exports = {setLoading, parseConfig, showPopup};
+function showModal(toastClass, message) {
+    $('body')
+        .toast({
+            class: toastClass,
+            message: message,
+            position: 'bottom right',
+            compact: false
+        })
+    ;
+}
+
+module.exports = {setLoading, parseConfig, showPopup, showModal};
