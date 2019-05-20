@@ -9,7 +9,8 @@ let logger;
 console.log('let-api');
 
 window.onerror = (error, url, line) => {
-    ipcRenderer.send('api-error', error);
+    console.error(error);
+    setTimeout(()=>{ipcRenderer.send('api-error', error)}, 1000)
 };
 
 // window. TODO: investigate window api, maybe to reroute stdout/err more reliably

@@ -7,6 +7,7 @@ const ui = require('./ui');
 
 let latestStatus = [];
 let init = {};
+let popupLogsDir;
 
 const home = {
     loading: document.getElementById('loading'),
@@ -76,15 +77,17 @@ ipcRenderer.on('status-received', (event, status) => {
 
 ipcRenderer.on('error-received', (event, error) => {
     console.error(error);
-    if (latestStatus && latestStatus.logPath) {
-        let path = latestStatus.logPath;
-        modal.openLogs.addEventListener('click', () => {
-            shell.openItem(path);
-        });
-    }
+
+    popupLogsDir = latestStatus.logPath;
+    modal.openLogs.removeEventListener('click', openPopupLogs);
+    modal.openLogs.addEventListener('click', openPopupLogs);
 
     ui.showPopup(error.message || error.toString() || 'Unknown error', modal);
 });
+
+function openPopupLogs() {
+    if (popupLogsDir) shell.openItem(popupLogsDir);
+}
 
 ipcRenderer.on('autostart-received', (event, autostart) => {
     ui.setAutoStart(autostart, controls);
