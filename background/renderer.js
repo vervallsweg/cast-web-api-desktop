@@ -8,17 +8,23 @@ let logger;
 
 console.log('let-api');
 
+window.onerror = (error, url, line) => {
+    ipcRenderer.send('api-error', error);
+};
+
+// window. TODO: investigate window api, maybe to reroute stdout/err more reliably
+
 ipcRenderer.on('did-finish-load', (event, init) => {
     hookConsole(init.logsDir);
     try {
         api = require('cast-web-api/api');
+
         ipcRenderer.send('api-logPath', {
             logPath: logger.logPath
         });
     } catch (e) {
         ipcRenderer.send('api-error', e);
     }
-    console.log('did-finish');
 });
 
 function hookConsole(logsDir) {

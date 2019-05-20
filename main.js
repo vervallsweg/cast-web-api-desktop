@@ -26,7 +26,7 @@ function createMainWindow () {
     // Create the main browser window.
     let mainWindow = new BrowserWindow({
         width: 450,
-        height: 470,
+        height: 480,
         minWidth: 380,
         minHeight: 470,
         titleBarStyle: 'hidden',
@@ -287,8 +287,9 @@ ipcMain.on('api-address', (event, address) => {
 });
 
 ipcMain.on('api-error', (event, error) => {
+    console.error(error);
     sendMainWindowError(error);
-    stop().then((stop)=>{event.sender.send('status-received', stop)});
+    stop().then((stop)=>{sendMainWindowStatus(stop)});
 });
 
 function start() {

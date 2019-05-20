@@ -83,7 +83,7 @@ ipcRenderer.on('error-received', (event, error) => {
         });
     }
 
-    ui.showPopup(error.message, modal);
+    ui.showPopup(error.message || error.toString() || 'Unknown error', modal);
 });
 
 ipcRenderer.on('autostart-received', (event, autostart) => {
