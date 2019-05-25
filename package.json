@@ -31,7 +31,8 @@
   "build": {
     "appId": "io.github.vervallsweg.cast-web-api-desktop",
     "mac": {
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "target": "dmg"
     },
     "win": {
       "target": [
@@ -42,6 +43,17 @@
             "ia32"
           ]
         }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "Snap"
+      ],
+      "arch": [
+        "x64",
+        "ia32",
+        "armv7l"
       ]
     },
     "asar": false
