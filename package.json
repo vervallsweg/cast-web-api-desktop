@@ -49,11 +49,6 @@
       "target": [
         "AppImage",
         "Snap"
-      ],
-      "arch": [
-        "x64",
-        "ia32",
-        "armv7l"
       ]
     },
     "asar": false
