@@ -47,8 +47,7 @@
     },
     "linux": {
       "target": [
-        "AppImage",
-        "Snap"
+        "AppImage"
       ]
     },
     "asar": false
