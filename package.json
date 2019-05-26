@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/vervallsweg/cast-web-api-desktop#readme",
   "dependencies": {
-    "cast-web-api": "1.2.0-rc3"
+    "cast-web-api": "1.2.0-rc8"
   },
   "devDependencies": {
     "electron": "^4.1.4",
