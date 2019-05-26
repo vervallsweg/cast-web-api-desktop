@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <script>
+        const pkg = require('../package.json');
         window.nodeRequire = require;
         delete window.require;
         delete window.exports;
@@ -31,7 +32,7 @@
                     <img class="status-img" src="https://github.com/vervallsweg/smartthings/raw/master/icn/ic-cast-web-api-gray-1200.png">
                 </div>
                 <div class="ten wide column">
-                    <h2>cast-web-api <span id="version">v1.2.0</span></h2>
+                    <h2>cast-web-api <span id="version"><script>document.write(pkg.version);</script></span></h2>
                     <h3 id="status">offline</h3>
                     <h3 id="address">-</h3>
                     <div class="ui popup">
