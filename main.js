@@ -308,7 +308,7 @@ function start() {
                     sendMainWindowError({message: "API doesn't respond. Check the log file to see the error message."});
                     stop().then(() => {sendMainWindowStatus({status: 'offline'})});
                 }
-            }, 5000);
+            }, 10000);
 
             windows.get('api').timeout = timeout;
         } else {

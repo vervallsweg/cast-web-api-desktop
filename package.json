@@ -1,6 +1,6 @@
 {
   "name": "cast-web-api-desktop",
-  "version": "1.2.0-rc8",
+  "version": "1.2.0",
   "description": "Desktop app for cast-web-api",
   "main": "main.js",
   "scripts": {
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/vervallsweg/cast-web-api-desktop#readme",
   "dependencies": {
-    "cast-web-api": "1.2.0-rc8"
+    "cast-web-api": "1.2.0"
   },
   "devDependencies": {
     "electron": "^4.1.4",
