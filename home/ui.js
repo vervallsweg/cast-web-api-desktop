@@ -5,12 +5,11 @@ function setLoading(isLoading, home) {
 function parseStatus(status, hero, controls) {
     if (!status) return;
 
-    status.forEach(({pm2_env={status: '-'}, address='-'}) => {
-        hero.status.innerHTML = pm2_env.status;
-        hero.address.innerHTML = address;
-        (pm2_env.pm_out_log_path) ? controls.openLogs.classList.value = 'item fluid ui button' : controls.openLogs.classList.value = 'item fluid ui button disabled';
-        setStatusImg(pm2_env.status, hero);
-    });
+    hero.status.innerHTML = status.status || '-';
+    hero.address.innerHTML = status.address || '-';
+    (status.logPath) ? controls.openLogs.classList.value = 'item fluid ui button' : controls.openLogs.classList.value = 'item fluid ui button disabled';
+    setStatusImg(status.status, hero);
+    setAddressPopup(status.address || '-', hero.addressPopup);
 }
 
 function showPopup(message, modal) {
@@ -25,4 +24,37 @@ function setStatusImg(status, hero) {
     hero.statusImg.classList.value = css;
 }
 
-module.exports = {setLoading, parseStatus, showPopup};
+function setAddressPopup(address) {
+    if (address === '-') {
+        $('#address')
+            .popup(
+                'destroy'
+            )
+        ;
+    } else {
+        $('#address')
+            .popup({
+                inline: true,
+                hoverable: true
+            })
+        ;
+    }
+}
+
+function setAutoStart(autoStart, controls) {
+    let buttonCss = 'ui fluid floating right labeled icon button';
+    let iconCss = 'close icon';
+    if (autoStart) {
+        buttonCss = 'ui fluid floating right labeled icon green button';
+        iconCss = 'check icon';
+    }
+
+    controls.autostart.classList.value = buttonCss;
+    controls.autostart.getElementsByTagName('i')[0].classList.value = iconCss;
+}
+
+function getAutoStart(controls) {
+    return (controls.autostart.classList.contains('green'));
+}
+
+module.exports = {setLoading, parseStatus, showPopup, setAutoStart, getAutoStart};

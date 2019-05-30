@@ -2,10 +2,12 @@
 // be executed in the renderer process for that window.
 // All of the Node.js APIs are available in this process.
 
-const { ipcRenderer, shell } = require('electron');
+const { clipboard, ipcRenderer, shell } = require('electron');
 const ui = require('./ui');
 
 let latestStatus = [];
+let init = {};
+let popupLogsDir;
 
 const home = {
     loading: document.getElementById('loading'),
@@ -17,7 +19,11 @@ const hero = {
     version: document.getElementById('version'),
     status: document.getElementById('status'),
     address: document.getElementById('address'),
-    statusImg: document.getElementById('status-img')
+    statusImg: document.getElementById('status-img'),
+    addressPopup: {
+        copy: document.getElementById('address-copy'),
+        open: document.getElementById('address-open')
+    }
 };
 
 const controls = {
@@ -26,20 +32,35 @@ const controls = {
     stop: document.getElementById('stop'),
     autostart: document.getElementById('autostart'),
     unautostart: document.getElementById('unautostart'),
-    fixPerm: document.getElementById('fix-perm'),
+    configDir: document.getElementById('config-dir'),
+    logsDir: document.getElementById('logs-dir'),
     openLogs: document.getElementById('open-logs'),
     swagger: document.getElementById('swagger')
 };
 
-const bottomMenu = {
-    all: document.getElementById('bottom-menu'),
+const bottomMenuLeft = {
+    all: document.getElementById('bottom-menu-left'),
+    donate: document.getElementById('donate'),
+    help: document.getElementById('help')
+};
+
+const bottomMenuRight = {
+    all: document.getElementById('bottom-menu-right'),
     refresh: document.getElementById('refresh'),
     settings: document.getElementById('settings')
 };
 
 const modal = {
-    content: document.getElementById('modal-content')
+    content: document.getElementById('modal-content'),
+    openLogs: document.getElementById('error-openLogs')
 };
+
+ipcRenderer.on('init', (event, newInit) => {
+    init = newInit;
+
+    if (init.autostart) ipcRenderer.send('control-start');
+    else ipcRenderer.send('bottom-menu-refresh');
+});
 
 ipcRenderer.on('did-finish-load', () => {
     ui.setLoading(false, home);
@@ -56,9 +77,20 @@ ipcRenderer.on('status-received', (event, status) => {
 
 ipcRenderer.on('error-received', (event, error) => {
     console.error(error);
-    let message = `${error.stdout}</br>${error.stderr}`;
-    if (error.error && error.error.message) message = `${error.error.message}</br></br>${message}`;
-    ui.showPopup(message, modal);
+
+    popupLogsDir = latestStatus.logPath;
+    modal.openLogs.removeEventListener('click', openPopupLogs);
+    modal.openLogs.addEventListener('click', openPopupLogs);
+
+    ui.showPopup(error.message || error.toString() || 'Unknown error', modal);
+});
+
+function openPopupLogs() {
+    if (popupLogsDir) shell.openItem(popupLogsDir);
+}
+
+ipcRenderer.on('autostart-received', (event, autostart) => {
+    ui.setAutoStart(autostart, controls);
 });
 
 controls.start.addEventListener('click', () => {
@@ -70,29 +102,47 @@ controls.stop.addEventListener('click', () => {
 });
 
 controls.autostart.addEventListener('click', () => {
-    ipcRenderer.send('control-startup');
+    ipcRenderer.send('control-set-autostart', !ui.getAutoStart(controls) );
 });
 
-controls.unautostart.addEventListener('click', () => {
-    ipcRenderer.send('control-unstartup');
-});
-
-controls.fixPerm.addEventListener('click', () => {
-    ipcRenderer.send('control-fix-perm');
-});
-
-controls.openLogs.addEventListener('click', () => {
-    if (latestStatus[0] && latestStatus[0].pm2_env && latestStatus[0].pm2_env.pm_out_log_path) {
-        shell.openItem(latestStatus[0].pm2_env.pm_out_log_path);
+controls.configDir.addEventListener('click', () => {
+    if (init.configDir) {
+        shell.openItem(init.configDir);
     }
 });
 
-bottomMenu.refresh.addEventListener('click', () => {
+controls.logsDir.addEventListener('click', () => {
+    if (init.logsDir) {
+        shell.openItem(init.logsDir);
+    }
+});
+
+controls.openLogs.addEventListener('click', () => {
+    if (latestStatus && latestStatus.logPath) {
+        shell.openItem(latestStatus.logPath);
+    }
+});
+
+bottomMenuRight.refresh.addEventListener('click', () => {
     ipcRenderer.send('bottom-menu-refresh');
 });
 
-bottomMenu.settings.addEventListener('click', () => {
+bottomMenuRight.settings.addEventListener('click', () => {
     ipcRenderer.send('bottom-menu-settings');
 });
 
-ipcRenderer.send('bottom-menu-refresh');
+bottomMenuLeft.donate.addEventListener('click', () => {
+    shell.openExternal('https://www.paypal.me/vervallsweg');
+});
+
+bottomMenuLeft.help.addEventListener('click', () => {
+    shell.openExternal('https://vervallsweg.github.io/cast-web/help/');
+});
+
+hero.addressPopup.copy.addEventListener('click', () => {
+    clipboard.writeText(latestStatus.address);
+});
+
+hero.addressPopup.open.addEventListener('click', () => {
+    shell.openExternal(latestStatus.address);
+});

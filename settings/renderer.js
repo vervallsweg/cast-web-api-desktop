@@ -36,7 +36,7 @@ ipcRenderer.on('config-received', (event, config) => {
 });
 
 ipcRenderer.on('config-saved', (event) => {
-    // ui.parseConfig(config, settings); TODO: display message
+    ui.showModal('success', 'Saved');
     console.log('config-saved');
 });
 
@@ -59,5 +59,3 @@ settingsForm.saveButton.addEventListener('click', () => {
         }
     });
 });
-
-ipcRenderer.send('get-config');

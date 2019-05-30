@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <script>
+        const pkg = require('../package.json');
         window.nodeRequire = require;
         delete window.require;
         delete window.exports;
@@ -31,9 +32,19 @@
                     <img class="status-img" src="https://github.com/vervallsweg/smartthings/raw/master/icn/ic-cast-web-api-gray-1200.png">
                 </div>
                 <div class="ten wide column">
-                    <h2>cast-web-api <span id="version">v1.2.0</span></h2>
-                    <h3 id="status">status</h3>
-                    <h3 id="address">address</h3>
+                    <h2>cast-web-api <span id="version"><script>document.write(pkg.version);</script></span></h2>
+                    <h3 id="status">offline</h3>
+                    <h3 id="address">-</h3>
+                    <div class="ui popup">
+                        <button class="ui right basic icon button" id="address-copy">
+                            <i class="copy outline icon"></i>
+                            Copy
+                        </button>
+                        <button class="ui right basic icon button" id="address-open">
+                            <i class="external alternate icon"></i>
+                            Open
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -45,12 +56,8 @@
                 <div class="eight wide column">
                     <div id="start" class="fluid ui button">start</div>
                     <!--autostart-->
-                    <div class="ui fluid floating right labeled icon dropdown button">
-                        autostart <i class="dropdown icon"></i>
-                        <div class="menu">
-                            <div id="autostart" class="item fluid ui button">enable</div>
-                            <div id="unautostart" class="item fluid ui button">disable</div>
-                        </div>
+                    <div id="autostart" class="ui fluid floating right labeled icon button">
+                        autostart <i class="close icon"></i>
                     </div>
                 </div>
                 <div class="eight wide column">
@@ -59,8 +66,9 @@
                     <div class="ui fluid floating right labeled icon dropdown button">
                         debugging <i class="dropdown icon"></i>
                         <div class="menu">
-                            <div id="fix-perm" class="item fluid ui button">fix permissions</div>
-                            <div id="open-logs" class="item fluid ui button">open logs</div>
+                            <div id="config-dir" class="item fluid ui button">open config folder</div>
+                            <div id="open-logs" class="item fluid ui button">open current logs</div>
+                            <div id="logs-dir" class="item fluid ui button">open logs folder</div>
                             <div id="swagger" class="item fluid ui button">swagger ui</div>
                         </div>
                     </div>
@@ -69,7 +77,11 @@
         </div>
     </div>
 </div>
-<div id="bottom-menu" style="position: fixed; bottom: 2em; right: 2em;">
+<div id="bottom-menu-left">
+    <div id="help" class="circular ui icon button"><i class="question icon"></i></div>
+    <div id="donate" class="circular ui icon button"><i class="icon paypal"></i></div>
+</div>
+<div id="bottom-menu-right" style="position: fixed; bottom: 2em; right: 2em;">
     <div id="refresh" class="circular ui icon button"><i class="redo alternate icon"></i></div>
     <div id="settings" class="circular ui icon button"><i class="icon cog"></i></div>
 </div>
@@ -84,8 +96,9 @@
         <p id="modal-content"></p>
     </div>
     <div class="actions">
-        <div class="ui icon basic cancel inverted button">
-            <i class="help icon"></i>
+        <div class="ui inverted basic button" id="error-openLogs">
+            <i class="file alternate icon"></i>
+            Logs
         </div>
         <div class="ui red ok inverted button">
             <i class="remove icon"></i>
@@ -94,10 +107,10 @@
     </div>
 </div>
 </body>
-<script>
-    nodeRequire('./renderer.js');
-</script>
 <script src="../js/jquery-3.4.0.min.js"></script>
 <script src="../js/semantic.min.js"></script>
 <script src="../js/app.js"></script>
+<script>
+    nodeRequire('./renderer.js');
+</script>
 </html>
