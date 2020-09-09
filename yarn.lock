@@ -453,10 +453,10 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-cast-web-api@1.2.0-rc8:
-  version "1.2.0-rc8"
-  resolved "https://registry.yarnpkg.com/cast-web-api/-/cast-web-api-1.2.0-rc8.tgz#061c26c1296b751c252a2d669c678623cdce87db"
-  integrity sha512-h16Ab/aZoP8UTTDv76VEop/X0NepjYsz6wz42TWsZzM2ruwrVW08vhpEfcZo2kXJu4DoRiLI2Nh0TlC4XWym+Q==
+cast-web-api@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/cast-web-api/-/cast-web-api-1.2.1.tgz#ad56647793a62d83fd1c214d4f6e2d8a9ee5a1a3"
+  integrity sha512-+Cw18oxXspGmogNJTa9KtwqwmZVJceUsYhUo6AOCR8eAFEHGpW21sP7dO2WdBWsXLu3mJZDDcsT0D0mkRBgqcg==
   dependencies:
     castv2 "*"
     castv2-client "^1.2.0"
@@ -3071,9 +3071,9 @@ yallist@^3.0.0, yallist@^3.0.2:
   integrity sha512-S+Zk8DEWE6oKpV+vI3qWkaK+jSbIK86pCwe2IF/xwIpQ8jEuxpw9NyaGjmp9+BoJv5FV2piqCDcoCtStppiq2A==
 
 yargs-parser@^13.0.0:
-  version "13.0.0"
-  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-13.0.0.tgz#3fc44f3e76a8bdb1cc3602e860108602e5ccde8b"
-  integrity sha512-w2LXjoL8oRdRQN+hOyppuXs+V/fVAYtpcrRxZuF7Kt/Oc+Jr2uAcVntaUTNT6w5ihoWfFDpNY8CPx1QskxZ/pw==
+  version "13.1.2"
+  resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-13.1.2.tgz#130f09702ebaeef2650d54ce6e3e5706f7a4fb38"
+  integrity sha512-3lbsNRf/j+A4QuSZfDRA7HRSfWrzO0YjqTJd5kjAq37Zep1CEgaYmrH9Q3GwPiB9cHyd1Y1UwggGhJGoxipbzg==
   dependencies:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
