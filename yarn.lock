@@ -453,10 +453,10 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-cast-web-api@1.2.0-rc8:
-  version "1.2.0-rc8"
-  resolved "https://registry.yarnpkg.com/cast-web-api/-/cast-web-api-1.2.0-rc8.tgz#061c26c1296b751c252a2d669c678623cdce87db"
-  integrity sha512-h16Ab/aZoP8UTTDv76VEop/X0NepjYsz6wz42TWsZzM2ruwrVW08vhpEfcZo2kXJu4DoRiLI2Nh0TlC4XWym+Q==
+cast-web-api@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/cast-web-api/-/cast-web-api-1.2.1.tgz#ad56647793a62d83fd1c214d4f6e2d8a9ee5a1a3"
+  integrity sha512-+Cw18oxXspGmogNJTa9KtwqwmZVJceUsYhUo6AOCR8eAFEHGpW21sP7dO2WdBWsXLu3mJZDDcsT0D0mkRBgqcg==
   dependencies:
     castv2 "*"
     castv2-client "^1.2.0"
@@ -1293,9 +1293,9 @@ has-unicode@^2.0.0:
   integrity sha1-4Ob+aijPUROIVeCG0Wkedx3iqLk=
 
 hosted-git-info@^2.1.4, hosted-git-info@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.7.1.tgz#97f236977bd6e125408930ff6de3eec6281ec047"
-  integrity sha512-7T/BxH19zbcCTa8XkMlbK5lTo1WtgkFi3GvdWEyNuc4Vex7/9Dqbnpsf4JMydcfj9HCg4zUWFTL3Za6lapg5/w==
+  version "2.8.9"
+  resolved "https://registry.yarnpkg.com/hosted-git-info/-/hosted-git-info-2.8.9.tgz#dffc0bf9a21c02209090f2aa69429e1414daf3f9"
+  integrity sha512-mxIDAb9Lsm6DoOJ7xH+5+X4y1LU/4Hi50L9C5sIswK3JzULS4bwk1FvjdBgvYR4bzT4tuUQiC15FE2f5HbLvYw==
 
 http-errors@1.6.3, http-errors@~1.6.2, http-errors@~1.6.3:
   version "1.6.3"
