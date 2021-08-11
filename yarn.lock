@@ -453,10 +453,10 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-cast-web-api@1.2.0-rc8:
-  version "1.2.0-rc8"
-  resolved "https://registry.yarnpkg.com/cast-web-api/-/cast-web-api-1.2.0-rc8.tgz#061c26c1296b751c252a2d669c678623cdce87db"
-  integrity sha512-h16Ab/aZoP8UTTDv76VEop/X0NepjYsz6wz42TWsZzM2ruwrVW08vhpEfcZo2kXJu4DoRiLI2Nh0TlC4XWym+Q==
+cast-web-api@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/cast-web-api/-/cast-web-api-1.2.1.tgz#ad56647793a62d83fd1c214d4f6e2d8a9ee5a1a3"
+  integrity sha512-+Cw18oxXspGmogNJTa9KtwqwmZVJceUsYhUo6AOCR8eAFEHGpW21sP7dO2WdBWsXLu3mJZDDcsT0D0mkRBgqcg==
   dependencies:
     castv2 "*"
     castv2-client "^1.2.0"
@@ -2155,9 +2155,9 @@ path-key@^2.0.0, path-key@^2.0.1:
   integrity sha1-QRyttXTFoUDTpLGRDUDYDMn0C0A=
 
 path-parse@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.6.tgz#d62dbb5679405d72c4737ec58600e9ddcf06d24c"
-  integrity sha512-GSmOT2EbHrINBf9SR7CDELwlJ8AENk3Qn7OikK4nFYAu3Ote2+JYNVvkpAEQm3/TLNEJFD/xZJjzyxg3KBWOzw==
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/path-parse/-/path-parse-1.0.7.tgz#fbc114b60ca42b30d9daf5858e4bd68bbedb6735"
+  integrity sha512-LDJzPVEEEPR+y48z93A0Ed0yXb8pAByGWo/k5YYdYgpY2/2EsOsksJrq7lOHxryrVOn1ejG6oAp8ahvOIQD8sw==
 
 path-to-regexp@0.1.7:
   version "0.1.7"
